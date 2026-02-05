@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Environment Variables (CRITICAL: Do not upload these)
+.env
+.env.test
+.env.production
+.env.local
+
+# Next.js build output
+.next/
+out/
+build/
+
+# Backend build output
+dist/
+coverage/
+
+# System files
+.DS_Store
+Thumbs.db
+*.log

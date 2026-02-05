@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    /* Base Options */
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "target": "es2016",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "strict": true,
+
+    /* File Output */
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "sourceMap": true,
+
+    /* Fix for your specific error */
+    "verbatimModuleSyntax": false,
+    "isolatedModules": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}
