@@ -1,28 +1,31 @@
 import { Request, Response } from 'express';
-import { getProductsService } from '../services/product.service';
-import { Product } from '../models/Product.model';
+import * as ProductService from '../services/product.service';
+import { HttpStatus } from '../constants/app.constants';
 
 export const getProducts = async (req: Request, res: Response) => {
   try {
-    const query = {
-      limit: req.query.limit ? parseInt(req.query.limit as string) : undefined,
-      cursor: req.query.cursor as string,
-      search: req.query.search as string
-    };
+    const { limit, cursor, search, category } = req.query;
 
-    const result = await getProductsService(query);
-    res.status(200).json(result);
+    const parsedLimit = limit ? parseInt(limit as string) : 10;
+    
+    const result = await ProductService.getProducts(
+      parsedLimit, 
+      cursor as string,
+      search as string,
+      category as string
+    );
+
+    res.status(HttpStatus.OK).json(result);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching products', error });
+    res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error fetching products' });
   }
 };
 
 export const createProduct = async (req: Request, res: Response) => {
   try {
-    const newProduct = new Product(req.body);
-    await newProduct.save();
-    res.status(201).json(newProduct);
+    const product = await ProductService.createProduct(req.body);
+    res.status(HttpStatus.CREATED).json(product);
   } catch (error) {
-    res.status(400).json({ message: 'Error creating product', error });
+    res.status(HttpStatus.BAD_REQUEST).json({ message: 'Error creating product' });
   }
 };

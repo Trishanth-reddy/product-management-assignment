@@ -1,9 +1,11 @@
+import { useState } from 'react';
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { fetchProducts } from '@/services/api';
 import { IProduct, IPaginatedResponse } from '@/types';
-import styles from '@/styles/Home.module.css'; 
+import styles from '@/styles/Home.module.css';
+
 export const getServerSideProps: GetServerSideProps = async () => {
   try {
     const res = await fetch('http://localhost:5001/api/products?limit=10');
@@ -14,11 +16,13 @@ export const getServerSideProps: GetServerSideProps = async () => {
   }
 };
 
-interface Props {
-  initialData: IPaginatedResponse | null;
-}
+interface Props { initialData: IPaginatedResponse | null; }
 
 export default function Home({ initialData }: Props) {
+  // State for filters
+  const [search, setSearch] = useState('');
+  const [category, setCategory] = useState('');
+
   const {
     data,
     fetchNextPage,
@@ -26,7 +30,7 @@ export default function Home({ initialData }: Props) {
     isFetchingNextPage,
     status,
   } = useInfiniteQuery({
-    queryKey: ['products'],
+    queryKey: ['products', search, category], // Triggers refetch when these change
     queryFn: fetchProducts,
     initialPageParam: null, 
     getNextPageParam: (lastPage) => lastPage.pagination.nextCursor,
@@ -42,6 +46,28 @@ export default function Home({ initialData }: Props) {
         <Link href="/add-product">
           <button className={styles.addButton}>+ Add Product</button>
         </Link>
+      </div>
+
+      {/* Search and Filter UI */}
+      <div style={{ marginBottom: '2rem', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+        <input 
+          type="text" 
+          placeholder="Search products..." 
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          style={{ padding: '0.75rem', flex: 1, minWidth: '200px', border: '1px solid #dee2e6', borderRadius: '6px' }}
+        />
+        <select 
+          value={category} 
+          onChange={(e) => setCategory(e.target.value)}
+          style={{ padding: '0.75rem', minWidth: '150px', border: '1px solid #dee2e6', borderRadius: '6px' }}
+        >
+          <option value="">All Categories</option>
+          <option value="ELECTRONICS">Electronics</option>
+          <option value="CLOTHING">Clothing</option>
+          <option value="BOOKS">Books</option>
+          <option value="FOOD">Food</option>
+        </select>
       </div>
 
       <div className={styles.grid}>
