@@ -2,24 +2,19 @@ import dotenv from 'dotenv';
 import path from 'path';
 
 const envFile = process.env.NODE_ENV === 'production' ? '.env.production' : '.env.test';
-const envPath = path.resolve(__dirname, `../../${envFile}`);
+dotenv.config({ path: path.resolve(__dirname, `../../${envFile}`) });
 
-dotenv.config({ path: envPath });
+const getEnv = (key: string): string => {
+  const value = process.env[key];
+  if (!value) {
+    throw new Error(`❌ Missing required environment variable: ${key}`);
+  }
+  return value;
+};
 
-interface IConfig {
-  NODE_ENV: string;
-  PORT: number;
-  MONGODB_URI: string;
-  CORS_ORIGIN: string;
-}
-
-if (!process.env.MONGODB_URI) {
-  throw new Error("⚠️  MONGODB_URI is missing in environment variables.");
-}
-
-export const config: IConfig = {
+export const config = {
   NODE_ENV: process.env.NODE_ENV || 'development',
-  PORT: parseInt(process.env.PORT || '5000', 10),
-  MONGODB_URI: process.env.MONGODB_URI,
-  CORS_ORIGIN: process.env.CORS_ORIGIN || 'http://localhost:3000',
+  PORT: process.env.PORT || 5000,
+  MONGODB_URI: getEnv('MONGODB_URI'), 
+  CORS_ORIGIN: getEnv('CORS_ORIGIN')
 };

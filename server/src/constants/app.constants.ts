@@ -13,7 +13,17 @@ export enum HttpStatus {
   INTERNAL_SERVER_ERROR = 500
 }
 
+export enum SortOrder {
+  ASC = 'asc',
+  DESC = 'desc'
+}
+
 export const PAGINATION_CONSTANTS = {
   DEFAULT_LIMIT: 10,
   MAX_LIMIT: 50
+} as const;
+
+export const API_ENDPOINTS = {
+  PRODUCTS: '/api/products',
+  PRODUCTS_BY_ID: '/api/products/:id'
 } as const;
