@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { IPaginatedResponse } from '@/types';
 
-// Connects to your backend on Port 5001
 export const api = axios.create({
   baseURL: 'http://localhost:5001/api', 
   headers: {

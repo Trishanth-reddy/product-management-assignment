@@ -3,8 +3,7 @@ import Link from 'next/link';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { fetchProducts } from '@/services/api';
 import { IProduct, IPaginatedResponse } from '@/types';
-import styles from '@/styles/Home.module.css'; // Import the CSS Module
-
+import styles from '@/styles/Home.module.css'; 
 export const getServerSideProps: GetServerSideProps = async () => {
   try {
     const res = await fetch('http://localhost:5001/api/products?limit=10');
