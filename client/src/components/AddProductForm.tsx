@@ -2,7 +2,15 @@ import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/services/api';
 import { useRouter } from 'next/router';
-import styles from '@/styles/Form.module.css'; 
+import styles from '@/styles/Form.module.css';
+
+interface NewProduct {
+  name: string;
+  description: string;
+  price: number;
+  category: string;
+  stock: number;
+}
 
 export default function AddProductForm() {
   const router = useRouter();
@@ -16,7 +24,7 @@ export default function AddProductForm() {
   });
 
   const mutation = useMutation({
-    mutationFn: (newProduct: any) => api.post('/products', newProduct),
+    mutationFn: (newProduct: NewProduct) => api.post('/products', newProduct),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['products'] });
       router.push('/');

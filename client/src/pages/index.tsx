@@ -19,7 +19,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
 interface Props { initialData: IPaginatedResponse | null; }
 
 export default function Home({ initialData }: Props) {
-  // State for filters
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('');
 
@@ -30,10 +29,10 @@ export default function Home({ initialData }: Props) {
     isFetchingNextPage,
     status,
   } = useInfiniteQuery({
-    queryKey: ['products', search, category], // Triggers refetch when these change
+    queryKey: ['products', search || null, category || null] as const, 
     queryFn: fetchProducts,
     initialPageParam: null, 
-    getNextPageParam: (lastPage) => lastPage.pagination.nextCursor,
+    getNextPageParam: (lastPage) => lastPage.pagination.nextCursor || null,
     initialData: initialData ? { pages: [initialData], pageParams: [null] } : undefined,
   });
 
